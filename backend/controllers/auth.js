@@ -1,7 +1,9 @@
 import catchAsyncErrors from "../middleware/catchAsyncErrors.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import LawyerSignUp from "../mongodb/models/authLawyer.js";
+import LawyerSignUp from "../mongodb/models/authuser.js";
+import lawyerModel from "../mongodb/models/lawyerDetails.js";
+import booking from "../mongodb/models/bookings.js";
 
 // Candidate Signup
 export const registerLawyer = catchAsyncErrors(async (req, res, next) => {
@@ -93,5 +95,31 @@ export const loginLawyer = catchAsyncErrors(async (req, res, next) => {
     token: tokenWithPrefix,
     user,
     message: "Logged in successfully",
+  });
+});
+
+export const detailsLawyer = catchAsyncErrors(async (req, res, next) => {
+  const lawyer = await lawyerModel.create(req.body);
+
+  res.status(201).json({
+    success: true,
+    lawyer,
+  });
+});
+
+export const bookingLawyer = catchAsyncErrors(async (req, res, next) => {
+  const { slot, lawyer } = req.body;
+  const existingBooking = await booking.findOne({ slot: slot, lawyer: lawyer });
+  if (existingBooking) {
+    return res.status(200).json({
+      success: false,
+      msg: "Slot already Booked by another person",
+    });
+  }
+  const book = await booking.create(req.body);
+
+  res.status(201).json({
+    success: true,
+    book,
   });
 });

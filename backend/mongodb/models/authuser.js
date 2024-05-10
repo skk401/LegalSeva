@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
-const lawyerSignUpModel = new mongoose.Schema(
+const userSignUpModel = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -17,6 +17,6 @@ const lawyerSignUpModel = new mongoose.Schema(
   { timestamps: true }
 );
 
-const LawyerSignUp = mongoose.model("LawyerSignUp", lawyerSignUpModel);
+const userSignUp = mongoose.model("userSignUp", userSignUpModel);
 
-export default LawyerSignUp;
+export default userSignUp;
